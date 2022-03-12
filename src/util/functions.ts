@@ -3,6 +3,8 @@ import path from "path";
 
 export function createScreenFile(name: string) {
   create(path.resolve('./dist/screen'))
+  // console.log({__dirname})
+  fs.readFileSync(path.join(__dirname, '/templates/screen-component-template.tsx'))
   fs.writeFile(`./dist/screen/${name}-screen.ts`, 'console.log("hola nene!!")', (error) => {
     if (error) throw error;
   });
