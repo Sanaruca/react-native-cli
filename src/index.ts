@@ -29,10 +29,10 @@ yargs
           ["test [name]", "t"],
           "generate a test",
           () => {},
-          (args) => {
+          (args: yargs.ArgumentsCamelCase<{name: string}>) => {
             try {
               console.log("test");
-              createScreenFile("");
+              createScreenFile(args.name);
             } catch (error) {
               throw error;
             }
