@@ -4,8 +4,8 @@ import { Text } from 'react-native';
 import { AppScreenProps } from '../types/screen-props';
 ////
 
-export default function $SCREEN_NAME$(props: AppScreenProps['$SCREEN_NAME$']) {
+export default function $SCREEN_NAME$Screen(props: AppScreenProps['$SCREEN_NAME$']) {
   return (
-    <Text>$SCREEN_NAME$ works!</Text>
+    <Text>$SCREEN_NAME$ screen works!</Text>
   )
 }

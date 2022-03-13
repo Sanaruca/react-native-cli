@@ -2,10 +2,12 @@ import fs from "fs";
 import path from "path";
 
 export function createScreenFile(name: string) {
-  create(path.resolve('./dist/screen'))
+  create(path.resolve('./dist/screens'))
   // console.log({__dirname})
   const text = fs.readFileSync(path.join(__dirname, '/templates/screen-component-template.tsx'))
-  fs.writeFile(`./dist/screen/${name}-screen.ts`, text, (error) => {
+  .toString()
+  .replace(/\$SCREEN_NAME\$/g, name)
+  fs.writeFile(`./dist/screens/${name}-screen.tsx`, text, (error) => {
     if (error) throw error;
   });
 }
