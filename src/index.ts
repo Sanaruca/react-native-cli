@@ -20,19 +20,27 @@ yargs
           (args) => console.log(args)
         )
         .command(
-          ["screen [name]", "s"],
+          ["screen <name>", "s"],
           "generate a react screen",
-          () => {},
-          (args) => console.log(args)
+          (yargs) => {
+            yargs.positional('name', {
+              
+            })
+          },
+          (args: yargs.ArgumentsCamelCase<{name: string}>) => {
+            // if (!args.name) throw Error('please put a name for the screen')
+
+            createScreenFile(args.name);
+          }
         )
         .command(
           ["test [name]", "t"],
           "generate a test",
           () => {},
-          (args: yargs.ArgumentsCamelCase<{name: string}>) => {
+          () => {
             try {
               console.log("test");
-              createScreenFile(args.name);
+              
             } catch (error) {
               throw error;
             }
