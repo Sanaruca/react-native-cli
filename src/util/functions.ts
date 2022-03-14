@@ -17,12 +17,17 @@ export function createScreenFile(name: string) {
   });
 }
 
-function ensureCreateDir(filePath: string) {
-  const condition = fs.existsSync(filePath);
+function ensureCreateDir(dirPath: string) {
+  const condition = fs.existsSync(dirPath);
   // console.log({ condition, filePath, next: path.dirname(filePath) })
   if (condition) return true;
-  ensureCreateDir(path.dirname(filePath));
-  fs.mkdirSync(filePath);
-  console.log("created:", filePath);
+  ensureCreateDir(path.dirname(dirPath));
+  fs.mkdirSync(dirPath);
+  console.log("created:", dirPath);
   // fs.mkdirSync(filePath)
+}
+
+function writeScreenProps(screenName: string, dirPath: string){
+  const isFileExist = fs.existsSync(path.join(dirPath))
+  console.log
 }
