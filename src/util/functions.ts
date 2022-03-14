@@ -3,8 +3,8 @@ import path from "path";
 
 export function createScreenFile(name: string) {
   name = name.at(0)?.toUpperCase() + name.slice(1);
-  create(path.resolve("./dist/screens"));
-  create(path.resolve("./dist/screens"));
+  ensureCreateDir(path.resolve("./dist/screens"));
+  ensureCreateDir(path.resolve("./dist/types"));
   // console.log({__dirname})
   const text = fs
     .readFileSync(
@@ -17,11 +17,11 @@ export function createScreenFile(name: string) {
   });
 }
 
-function create(filePath: string) {
+function ensureCreateDir(filePath: string) {
   const condition = fs.existsSync(filePath);
   // console.log({ condition, filePath, next: path.dirname(filePath) })
   if (condition) return true;
-  create(path.dirname(filePath));
+  ensureCreateDir(path.dirname(filePath));
   fs.mkdirSync(filePath);
   console.log("created:", filePath);
   // fs.mkdirSync(filePath)
