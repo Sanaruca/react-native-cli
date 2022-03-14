@@ -2,6 +2,7 @@ import fs from "fs";
 import path from "path";
 
 export function createScreenFile(name: string) {
+  name = name.at(0)?.toUpperCase() + name.slice(1)
   create(path.resolve('./dist/screens'))
   // console.log({__dirname})
   const text = fs.readFileSync(path.join(__dirname, '/templates/screen-component-template.tsx'))

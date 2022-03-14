@@ -1,0 +1,20 @@
+import { NativeStackScreenProps } from "@react-navigation/native-stack";
+
+export type appScreenName = keyof BaseStackScreenParamList;
+export type AppScreenProps = {
+  [ScreenName in appScreenName]: NativeStackScreenProps<
+    StackScreenParamList,
+    ScreenName
+  >;
+};
+
+type BaseStackScreenParamList = {
+  Home: {};
+};
+
+interface CommonParams {
+  title?: string;
+}
+
+export type StackScreenParamList = BaseStackScreenParamList &
+  Record<appScreenName, CommonParams>;

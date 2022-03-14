@@ -23,11 +23,12 @@ yargs
           ["screen <name>", "s"],
           "generate a react screen",
           (yargs) => {
-            yargs.positional('name', {
-              
-            })
+            yargs.positional("name", {
+              describe: "name of the screen to be created",
+              type: "string",
+            });
           },
-          (args: yargs.ArgumentsCamelCase<{name: string}>) => {
+          (args: yargs.ArgumentsCamelCase<{ name: string }>) => {
             // if (!args.name) throw Error('please put a name for the screen')
 
             createScreenFile(args.name);
@@ -40,7 +41,6 @@ yargs
           () => {
             try {
               console.log("test");
-              
             } catch (error) {
               throw error;
             }
