@@ -6,7 +6,7 @@ export function createScreenFile(name: string) {
   ensureCreateDir(path.resolve("./dist/screens"));
   ensureCreateDir(path.resolve("./dist/types"));
   // console.log({__dirname})
-  writeScreenProps(name, path.resolve("./dist/types"))
+  writeScreenProps(name, path.resolve("./dist/types"));
   const text = fs
     .readFileSync(
       path.join(__dirname, "/templates/screen-component-template.dott")
@@ -28,12 +28,15 @@ function ensureCreateDir(dirPath: string) {
   // fs.mkdirSync(filePath)
 }
 
-function writeScreenProps(screenName: string, typesDirPath: string){
-  const screenPropsFilePath = path.join(typesDirPath, 'screen-props.ts')
-  const isFileExist = fs.existsSync(screenPropsFilePath)
-  if(!isFileExist){
-    const content = fs.readFileSync(path.join(__dirname, '/templates/screen-props-template.dott'))
-    fs.writeFileSync(screenPropsFilePath, content)
-    console.log('created:', screenPropsFilePath)
+function writeScreenProps(screenName: string, typesDirPath: string) {
+  const screenPropsFilePath = path.join(typesDirPath, "screen-props.ts");
+  const isFileExist = fs.existsSync(screenPropsFilePath);
+  if (!isFileExist) {
+    const content = fs.readFileSync(
+      path.join(__dirname, "/templates/screen-props-template.dott")
+    );
+    fs.writeFileSync(screenPropsFilePath, content);
+    console.log("created:", screenPropsFilePath);
   }
+  console.log(fs.readFileSync(screenPropsFilePath).toString().match(/^type BaseStackScreenParamList[\S\s]+};$/m)?.at(0))
 }
