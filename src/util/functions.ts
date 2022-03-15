@@ -29,6 +29,11 @@ function ensureCreateDir(dirPath: string) {
 }
 
 function writeScreenProps(screenName: string, typesDirPath: string){
-  const isFileExist = fs.existsSync(path.join(typesDirPath))
-  console.log({isFileExist})
+  const screenPropsFilePath = path.join(typesDirPath, 'screen-props.ts')
+  const isFileExist = fs.existsSync(screenPropsFilePath)
+  if(!isFileExist){
+    const content = fs.readFileSync(path.join(__dirname, '/templates/screen-props-template.dott'))
+    fs.writeFileSync(screenPropsFilePath, content)
+    console.log('created:', screenPropsFilePath)
+  }
 }

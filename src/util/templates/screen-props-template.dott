@@ -10,6 +10,7 @@ export type AppScreenProps = {
 
 type BaseStackScreenParamList = {
   Home: {};
+  // add your screen param lists type: { [screen_name]: { param: type } }
 };
 
 interface CommonParams {
