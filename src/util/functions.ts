@@ -6,6 +6,7 @@ export function createScreenFile(name: string) {
   ensureCreateDir(path.resolve("./dist/screens"));
   ensureCreateDir(path.resolve("./dist/types"));
   // console.log({__dirname})
+  writeScreenProps(name, path.resolve("./dist/types"))
   const text = fs
     .readFileSync(
       path.join(__dirname, "/templates/screen-component-template.dott")
@@ -27,7 +28,7 @@ function ensureCreateDir(dirPath: string) {
   // fs.mkdirSync(filePath)
 }
 
-function writeScreenProps(screenName: string, dirPath: string){
-  const isFileExist = fs.existsSync(path.join(dirPath))
-  console.log
+function writeScreenProps(screenName: string, typesDirPath: string){
+  const isFileExist = fs.existsSync(path.join(typesDirPath))
+  console.log({isFileExist})
 }
