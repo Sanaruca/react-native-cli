@@ -40,3 +40,51 @@ function writeScreenProps(screenName: string, typesDirPath: string) {
   }
   console.log(fs.readFileSync(screenPropsFilePath).toString().match(/^type BaseStackScreenParamList[\S\s]+};$/m)?.at(0))
 }
+
+
+
+
+
+
+function getTypes(input: string) {
+  const nBrackets = input.match(/[{}]/g)!.length
+  if (nBrackets % 2 != 0) throw new Error('some braket missing')
+  let match;
+  const regex = /\w+\s*:\s*{/g,
+    auxArr = [];
+  while ((match = regex.exec(input)) !== null) {
+    const matchStartPossition = match.index,
+      [matchValue] = match,
+      auxInput = input.slice(matchStartPossition + matchValue.length);
+
+    let i = 0, countRigthBraket = 0, countLeftBraket = 1
+
+    while (countLeftBraket != countRigthBraket) {
+      const char = auxInput[i++];
+      switch (char) {
+        case '{':
+          countLeftBraket++
+          break;
+        case '}':
+          countRigthBraket++
+          break;
+      }
+    }
+    auxArr.push(input.slice(matchStartPossition, matchStartPossition + matchValue.length + i))
+  }
+  let l = auxArr.length
+  let lastItered = 0;
+  while (true) {
+    for (const [i, str] of auxArr.entries()) {
+      if (i < lastItered) continue;
+      const nextStr = auxArr[i + 1]
+      if (str.includes(nextStr)) {
+        auxArr.splice(i + 1, 1)
+        lastItered = i
+        break;
+      }
+    }
+    if (l == auxArr.length) break; else l = auxArr.length
+  }
+  return auxArr
+}
