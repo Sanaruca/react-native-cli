@@ -38,13 +38,26 @@ function writeScreenProps(screenName: string, typesDirPath: string) {
     fs.writeFileSync(screenPropsFilePath, content);
     console.log("created:", screenPropsFilePath);
   }
-  console.log(
-    fs
-      .readFileSync(screenPropsFilePath)
-      .toString()
-      .match(/^type BaseStackScreenParamList[\S\s]+};$/m)
-      ?.at(0)
-  );
+  const screenPropsContent = fs.readFileSync(screenPropsFilePath).toString(),
+    match = screenPropsContent.match(
+      /type\s*BaseStackScreenParamList\s*=\s*{/m
+    );
+  let rbCount = 0,
+    lbCount = 1,
+    i = 0;
+  const test = screenPropsContent.slice(match!.index! + match!.at(0)!.length);
+  while (lbCount != rbCount) {
+    const char = test[i++];
+    switch (char) {
+      case "{":
+        lbCount++;
+        break;
+      case "}":
+        rbCount++;
+        break;
+    }
+  }
+  console;
 }
 
 function getTypes(input: string) {
