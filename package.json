@@ -7,8 +7,8 @@
     "rn": "./bin/index.js"
   },
   "scripts": {
-    "build": "tsc",
-    "copy-files": "cp ./src/util/templates/ ./bin/templates/ -R",
+    "build": "tsc && npm run copy-files",
+    "copy-files": "cp ./src/util/templates/ ./bin/util/templates/ -R",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
