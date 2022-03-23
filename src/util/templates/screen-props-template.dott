@@ -9,7 +9,7 @@ export type AppScreenProps = {
 };
 
 type BaseStackScreenParamList = {
-  Home: {};
+  $SCREEN_NAME$: {};  
 };
 
 interface CommonParams {

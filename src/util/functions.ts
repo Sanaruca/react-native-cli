@@ -34,7 +34,7 @@ function writeScreenProps(screenName: string, typesDirPath: string) {
   if (!isFileExist) {
     const content = fs.readFileSync(
       path.join(__dirname, "/templates/screen-props-template.dott")
-    );
+    ).toString().replace('$SCREEN_NAME$', screenName.at(0)?.toUpperCase() + screenName.slice(1));
     fs.writeFileSync(screenPropsFilePath, content);
     console.log("created:", screenPropsFilePath);
   }
