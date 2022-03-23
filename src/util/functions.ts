@@ -6,15 +6,36 @@ export function createComponentFile(name: string) {
   const fileDist = `./dist/components/${name}-component.tsx`;
   if (fs.existsSync(fileDist)) return;
   ensureCreateDir(path.resolve("./dist/components"));
+  ensureCreateDir(path.resolve("./dist/types"));
   const content = fs
     .readFileSync(path.join(__dirname, "/templates/component-template.dott"))
     .toString()
-    .replace(/\$COMPONENT_NAME\$/g, name);
-  fs.writeFileSync(fileDist, content);
+    .replace(/\$COMPONENT_NAME\$/g, name.replace(/[-_\./\\]/g, ""));
+  fs.writeFile(fileDist, content, (err) => {
+    if (err) throw err;
+    console.log("created:", fileDist);
+  });
+}
+
+function writeComponentProps(componentName: string, typesPathDir: string) {
+  const propsFilePath = path.join(typesPathDir, "props.ts");
+  if (!fs.existsSync(propsFilePath)) {
+    fs.writeFileSync(
+      propsFilePath,
+      `export interface ${strFormat(componentName)}Props {}\n`
+    );
+  } else {
+    
+  }
+}
+
+function strFormat(input: string) {
+  // TODO
+  return input.at(0)?.toUpperCase() + input.slice(1);
 }
 
 export function createScreenFile(name: string) {
-  name = name.at(0)?.toUpperCase() + name.slice(1);
+  name = strFormat(name);
   ensureCreateDir(path.resolve("./dist/screens"));
   ensureCreateDir(path.resolve("./dist/types"));
   // console.log({__dirname})

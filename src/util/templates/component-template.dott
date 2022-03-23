@@ -1,7 +1,7 @@
 import React from 'react';
 import { Text } from 'react-native';
 
-export default function $COMPONENT_NAME$Component() {
+export default function $COMPONENT_NAME$(props: $COMPONENT_NAME$Props) {
   return (
     <Text>$COMPONENT_NAME$ component works!</Text>
   );
