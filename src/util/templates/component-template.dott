@@ -1,0 +1,8 @@
+import React from 'react';
+import { Text } from 'react-native';
+
+export default function $COMPONENT_NAME$Component() {
+  return (
+    <Text>$COMPONENT_NAME$ component works!</Text>
+  );
+}
