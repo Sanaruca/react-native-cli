@@ -63,7 +63,7 @@ function writeScreenProps(screenName: string, typesDirPath: string) {
     screenPropsFilePath,
     screenPropsContent.replace(
       input,
-      "type BaseStackScreenParamList = {\n" + types.join(",\n") + "\n}"
+      "type BaseStackScreenParamList = {\n\t" + types.join(";\n\t") + ";\n}"
     )
   );
 }
