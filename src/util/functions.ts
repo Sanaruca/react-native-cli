@@ -35,10 +35,15 @@ function writeComponentProps(componentName: string, typesPathDir: string) {
       { flag: "a" },
       (err) => {
         if (err) throw err;
-        console.log('type', strFormat(componentName) + "Props", 'added to:', propsFilePath);
       }
     );
   }
+  console.log(
+    "type",
+    strFormat(componentName) + "Props",
+    "added to:",
+    propsFilePath
+  );
 }
 
 function strFormat(input: string) {
