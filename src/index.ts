@@ -1,7 +1,7 @@
 #! /usr/bin/env node
 
 import yargs, { Argv } from "yargs";
-import { createScreenFile } from "./util/functions";
+import { createComponentFile, createScreenFile } from "./util/functions";
 
 // console.log(yargs.argv);
 
@@ -16,8 +16,15 @@ yargs
         .command(
           ["component [name]", "c"],
           "generate a react component",
-          () => {},
-          (args) => console.log(args)
+          (yargs) => {
+            yargs.positional("name", {
+              describe: "name of the component to be created",
+              type: "string",
+            });
+          },
+          (args:  yargs.ArgumentsCamelCase<{ name: string }>) => {
+            createComponentFile(args.name)
+          }
         )
         .command(
           ["screen <name>", "s"],

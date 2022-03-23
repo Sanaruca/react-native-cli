@@ -1,19 +1,29 @@
 import fs from "fs";
 import path from "path";
 
+export function createComponentFile(name: string) {
+  name = name.at(0)?.toUpperCase() + name.slice(1);
+  ensureCreateDir(path.resolve("./dist/components"));
+  const content = fs
+    .readFileSync(path.join(__dirname, "/templates/component-template.dott"))
+    .toString()
+    .replace(/\$COMPONENT_NAME\$/g, name);
+  fs.writeFileSync(`./dist/components/${name}-component.tsx`, content);
+}
+
 export function createScreenFile(name: string) {
   name = name.at(0)?.toUpperCase() + name.slice(1);
   ensureCreateDir(path.resolve("./dist/screens"));
   ensureCreateDir(path.resolve("./dist/types"));
   // console.log({__dirname})
   writeScreenProps(name, path.resolve("./dist/types"));
-  const text = fs
+  const content = fs
     .readFileSync(
       path.join(__dirname, "/templates/screen-component-template.dott")
     )
     .toString()
     .replace(/\$SCREEN_NAME\$/g, name);
-  fs.writeFile(`./dist/screens/${name}-screen.tsx`, text, (error) => {
+  fs.writeFile(`./dist/screens/${name}-screen.tsx`, content, (error) => {
     if (error) throw error;
   });
 }
@@ -32,12 +42,18 @@ function writeScreenProps(screenName: string, typesDirPath: string) {
   const screenPropsFilePath = path.join(typesDirPath, "screen-props.ts");
   const isFileExist = fs.existsSync(screenPropsFilePath);
   if (!isFileExist) {
-    const content = fs.readFileSync(
-      path.join(__dirname, "/templates/screen-props-template.dott")
-    ).toString().replace('$SCREEN_NAME$', screenName.at(0)?.toUpperCase() + screenName.slice(1));
+    const content = fs
+      .readFileSync(
+        path.join(__dirname, "/templates/screen-props-template.dott")
+      )
+      .toString()
+      .replace(
+        "$SCREEN_NAME$",
+        screenName.at(0)?.toUpperCase() + screenName.slice(1)
+      );
     fs.writeFileSync(screenPropsFilePath, content);
     console.log("created:", screenPropsFilePath);
-    return
+    return;
   }
   const screenPropsContent = fs.readFileSync(screenPropsFilePath).toString(),
     match = screenPropsContent.match(
