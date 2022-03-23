@@ -1,5 +1,6 @@
 import React from 'react';
 import { Text } from 'react-native';
+import { $COMPONENT_NAME$Props } from "../types/props";
 
 export default function $COMPONENT_NAME$(props: $COMPONENT_NAME$Props) {
   return (

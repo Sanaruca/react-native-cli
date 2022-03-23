@@ -14,7 +14,7 @@ yargs
     (yargs) => {
       yargs
         .command(
-          ["component [name]", "c"],
+          ["component <name>", "c"],
           "generate a react component",
           (yargs) => {
             yargs.positional("name", {
@@ -45,9 +45,9 @@ yargs
           ["test [name]", "t"],
           "generate a test",
           () => {},
-          () => {
+          (args) => {
             try {
-              console.log("test");
+              console.log("test", args);
             } catch (error) {
               throw error;
             }

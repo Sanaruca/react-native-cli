@@ -11,7 +11,7 @@ export function createComponentFile(name: string) {
   const content = fs
     .readFileSync(path.join(__dirname, "/templates/component-template.dott"))
     .toString()
-    .replace(/\$COMPONENT_NAME\$/g, name.replace(/[-_\./\\]/g, ""));
+    .replace(/\$COMPONENT_NAME\$/g, strFormat(name));
 
   fs.writeFile(fileDist, content, (err) => {
     if (err) throw err;
