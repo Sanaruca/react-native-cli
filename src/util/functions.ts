@@ -3,12 +3,14 @@ import path from "path";
 
 export function createComponentFile(name: string) {
   name = name.at(0)?.toUpperCase() + name.slice(1);
+  const fileDist = `./dist/components/${name}-component.tsx`;
+  if (fs.existsSync(fileDist)) return;
   ensureCreateDir(path.resolve("./dist/components"));
   const content = fs
     .readFileSync(path.join(__dirname, "/templates/component-template.dott"))
     .toString()
     .replace(/\$COMPONENT_NAME\$/g, name);
-  fs.writeFileSync(`./dist/components/${name}-component.tsx`, content);
+  fs.writeFileSync(fileDist, content);
 }
 
 export function createScreenFile(name: string) {
