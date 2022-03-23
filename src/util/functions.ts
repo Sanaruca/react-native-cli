@@ -7,10 +7,12 @@ export function createComponentFile(name: string) {
   if (fs.existsSync(fileDist)) return;
   ensureCreateDir(path.resolve("./dist/components"));
   ensureCreateDir(path.resolve("./dist/types"));
+  writeComponentProps(name, path.resolve("./dist/types"));
   const content = fs
     .readFileSync(path.join(__dirname, "/templates/component-template.dott"))
     .toString()
     .replace(/\$COMPONENT_NAME\$/g, name.replace(/[-_\./\\]/g, ""));
+
   fs.writeFile(fileDist, content, (err) => {
     if (err) throw err;
     console.log("created:", fileDist);
@@ -18,14 +20,24 @@ export function createComponentFile(name: string) {
 }
 
 function writeComponentProps(componentName: string, typesPathDir: string) {
-  const propsFilePath = path.join(typesPathDir, "props.ts");
+  const propsFilePath = path.join(typesPathDir, "props.ts"),
+    interfaceDeclaration = `export interface ${strFormat(
+      componentName
+    )}Props {}\n`;
+
   if (!fs.existsSync(propsFilePath)) {
-    fs.writeFileSync(
-      propsFilePath,
-      `export interface ${strFormat(componentName)}Props {}\n`
-    );
+    fs.writeFileSync(propsFilePath, interfaceDeclaration);
+    console.log("created:", propsFilePath);
   } else {
-    
+    fs.writeFile(
+      propsFilePath,
+      "\n" + interfaceDeclaration,
+      { flag: "a" },
+      (err) => {
+        if (err) throw err;
+        console.log('type', strFormat(componentName) + "Props", 'added to:', propsFilePath);
+      }
+    );
   }
 }
 
