@@ -42,12 +42,12 @@ function writeScreenProps(screenName: string, typesDirPath: string) {
     match = screenPropsContent.match(
       /type\s*BaseStackScreenParamList\s*=\s*{/m
     );
+  if (screenPropsContent.includes(screenName)) return;
   let rbCount = 0,
     lbCount = 1,
-    i = 0;
-  const test = screenPropsContent.slice(match!.index! + match!.at(0)!.length);
+    i = match!.index! + match!.at(0)!.length;
   while (lbCount != rbCount) {
-    const char = test[i++];
+    const char = screenPropsContent[i++];
     switch (char) {
       case "{":
         lbCount++;
@@ -57,7 +57,15 @@ function writeScreenProps(screenName: string, typesDirPath: string) {
         break;
     }
   }
-  console;
+  const input = screenPropsContent.slice(match!.index, i),
+    types = [...getTypes(input), screenName + ": {}"];
+  fs.writeFileSync(
+    screenPropsFilePath,
+    screenPropsContent.replace(
+      input,
+      "type BaseStackScreenParamList = {\n" + types.join(",\n") + "\n}"
+    )
+  );
 }
 
 function getTypes(input: string) {
