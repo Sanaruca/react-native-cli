@@ -37,6 +37,7 @@ function writeScreenProps(screenName: string, typesDirPath: string) {
     ).toString().replace('$SCREEN_NAME$', screenName.at(0)?.toUpperCase() + screenName.slice(1));
     fs.writeFileSync(screenPropsFilePath, content);
     console.log("created:", screenPropsFilePath);
+    return
   }
   const screenPropsContent = fs.readFileSync(screenPropsFilePath).toString(),
     match = screenPropsContent.match(
