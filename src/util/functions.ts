@@ -2,8 +2,9 @@ import fs from "fs";
 import path from "path";
 
 export function createComponentFile(name: string) {
-  name = name.at(0)?.toUpperCase() + name.slice(1);
-  const fileDist = `./dist/components/${name}-component.tsx`;
+  const fileNameFormat = strFormat(name, 'split-by-dash')
+  name = strFormat(name);
+  const fileDist = `./dist/components/${fileNameFormat}-component.tsx`;
   if (fs.existsSync(fileDist)) return;
   ensureCreateDir(path.resolve("./dist/components"));
   ensureCreateDir(path.resolve("./dist/types"));
@@ -11,7 +12,7 @@ export function createComponentFile(name: string) {
   const content = fs
     .readFileSync(path.join(__dirname, "/templates/component-template.dott"))
     .toString()
-    .replace(/\$COMPONENT_NAME\$/g, strFormat(name));
+    .replace(/\$COMPONENT_NAME\$/g, strFormat(name, 'UpperCamelCase'));
 
   fs.writeFile(fileDist, content, (err) => {
     if (err) throw err;
@@ -46,13 +47,10 @@ function writeComponentProps(componentName: string, typesPathDir: string) {
   );
 }
 
-function strFormat(input: string) {
-  // TODO
-  return input.at(0)?.toUpperCase() + input.slice(1);
-}
-
 export function createScreenFile(name: string) {
+  const fileNameFormat = strFormat(name, 'split-by-dash')
   name = strFormat(name);
+  const fileDist = path.resolve(`./dist/screens/${fileNameFormat}-screen.tsx`);
   ensureCreateDir(path.resolve("./dist/screens"));
   ensureCreateDir(path.resolve("./dist/types"));
   // console.log({__dirname})
@@ -62,9 +60,10 @@ export function createScreenFile(name: string) {
       path.join(__dirname, "/templates/screen-component-template.dott")
     )
     .toString()
-    .replace(/\$SCREEN_NAME\$/g, name);
-  fs.writeFile(`./dist/screens/${name}-screen.tsx`, content, (error) => {
+    .replace(/\$SCREEN_NAME\$/g, strFormat(name, 'UpperCamelCase'));
+  fs.writeFile(fileDist, content, (error) => {
     if (error) throw error;
+    console.log("created:", fileDist);
   });
 }
 
@@ -89,7 +88,7 @@ function writeScreenProps(screenName: string, typesDirPath: string) {
       .toString()
       .replace(
         "$SCREEN_NAME$",
-        screenName.at(0)?.toUpperCase() + screenName.slice(1)
+        strFormat(screenName, 'UpperCamelCase')
       );
     fs.writeFileSync(screenPropsFilePath, content);
     console.log("created:", screenPropsFilePath);
@@ -174,4 +173,20 @@ function getTypes(input: string) {
     else l = auxArr.length;
   }
   return auxArr;
+}
+
+function strFormat(input: string, style: 'camelCase'| 'UpperCamelCase' | 'snake_case' | 'split-by-dash' | 'SNAKE_CASE' = 'camelCase') {
+    const regex = /[-_]/g,
+        arr = regex.test(input) ? input.split(regex) : [input],
+        styleCase: Record<typeof style, string> = {
+            camelCase: arr.reduce((acc, current, i) => !i ? acc + current : acc + camelCase(current)),
+            snake_case: arr.join('_').toLowerCase(),
+            get UpperCamelCase(){ return this.camelCase.charAt(0).toUpperCase() + this.camelCase.slice(1) },
+            get 'split-by-dash'() { return this.snake_case.replace(/_/g, '-') },
+            get SNAKE_CASE() { return this.snake_case.toUpperCase() }
+        }
+    return styleCase[style]
+    function camelCase(str: string) {
+        return str.charAt(0)?.toUpperCase() + str.slice(1).toLowerCase()
+    }
 }

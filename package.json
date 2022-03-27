@@ -8,7 +8,8 @@
   },
   "scripts": {
     "build": "tsc && npm run copy-files",
-    "copy-files": "cp ./src/util/templates/ ./bin/util/templates/ -R",
+    "install-globally": "npm i && npm run build && npm i -g",
+    "copy-files": "npx copyfiles -f ./src/util/templates/* ./bin/util/templates",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
@@ -22,6 +23,8 @@
   "devDependencies": {
     "@types/node": "^17.0.21",
     "@types/yargs": "^17.0.9",
+    "copyfiles": "^2.4.1",
+    "ts-node": "^10.7.0",
     "typescript": "^4.6.2"
   }
 }
