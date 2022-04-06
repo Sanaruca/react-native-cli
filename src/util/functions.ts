@@ -1,14 +1,28 @@
 import fs from "fs";
 import path from "path";
 
-export function createComponentFile(name: string) {
+export function init(appName: string) {
+  const content = fs.readFileSync(path.join(__dirname,'./templates/app-root-template.dott')),
+    projectPath = path.resolve(`./${appName}`),
+    appRootFilePath = path.join(projectPath, 'App.tsx');
+  ensureCreateDir(path.join(projectPath, 'app/components'))
+  fs.writeFileSync(path.join(projectPath,'/app/components/Layout.tsx'), fs.readFileSync(path.join(__dirname,'./templates/layout-component-template.dott')));
+  console.log('created:', 'Layout');
+  createScreenFile('home', projectPath);
+  fs.writeFile(appRootFilePath, content, (error)=> {
+    if(error) throw error;
+    console.log('created:', appRootFilePath)
+  })
+}
+
+export function createComponentFile(name: string, projectPath = path.resolve() ) {
   const fileNameFormat = strFormat(name, 'split-by-dash')
   name = strFormat(name);
-  const fileDist = `./dist/components/${fileNameFormat}-component.tsx`;
+  const fileDist = path.join(projectPath, `/app/components/${fileNameFormat}-component.tsx`);
   if (fs.existsSync(fileDist)) return;
-  ensureCreateDir(path.resolve("./dist/components"));
-  ensureCreateDir(path.resolve("./dist/types"));
-  writeComponentProps(name, path.resolve("./dist/types"));
+  ensureCreateDir(path.join(projectPath,'/app/components'));
+  ensureCreateDir(path.join(projectPath,'/app/types'));
+  writeComponentProps(name, path.join(projectPath,'/app/types'));
   const content = fs
     .readFileSync(path.join(__dirname, "/templates/component-template.dott"))
     .toString()
@@ -47,14 +61,14 @@ function writeComponentProps(componentName: string, typesPathDir: string) {
   );
 }
 
-export function createScreenFile(name: string) {
+export function createScreenFile(name: string, projectPath = path.resolve()) {
   const fileNameFormat = strFormat(name, 'split-by-dash')
   name = strFormat(name);
-  const fileDist = path.resolve(`./dist/screens/${fileNameFormat}-screen.tsx`);
-  ensureCreateDir(path.resolve("./dist/screens"));
-  ensureCreateDir(path.resolve("./dist/types"));
+  const fileDist = path.join(projectPath, `/app/screens/${fileNameFormat}-screen.tsx`);
+  ensureCreateDir(path.join(projectPath, '/app/screens'));
+  ensureCreateDir(path.join(projectPath, '/app/types'));
   // console.log({__dirname})
-  writeScreenProps(name, path.resolve("./dist/types"));
+  writeScreenProps(name, path.join(projectPath, './app/types'));
   const content = fs
     .readFileSync(
       path.join(__dirname, "/templates/screen-component-template.dott")

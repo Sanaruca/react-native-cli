@@ -8,7 +8,7 @@
   },
   "scripts": {
     "build": "tsc && npm run copy-files",
-    "install-globally": "npm i && npm run build && npm i -g",
+    "cli-install": "npm i && npm run build && npm i -g",
     "copy-files": "npx copyfiles -f ./src/util/templates/* ./bin/util/templates",
     "test": "echo \"Error: no test specified\" && exit 1"
   },

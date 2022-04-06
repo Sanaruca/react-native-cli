@@ -1,7 +1,7 @@
 #! /usr/bin/env node
 
 import yargs, { Argv } from "yargs";
-import { createComponentFile, createScreenFile } from "./util/functions";
+import { createComponentFile, createScreenFile, init } from "./util/functions";
 
 // console.log(yargs.argv);
 
@@ -55,10 +55,12 @@ yargs
         );
     },
     (args) => console.log("args")
-  )
+  ).command('init <app-name>', 'initialize a react project', ()=> {}, (args: yargs.ArgumentsCamelCase<{ ['app-name']: string }>)=>{
+    init(args['app-name'])
+  })
   .example(
-    "$0 generate screen screen-name",
-    'generate a react screen component named "screen-name"'
+    "$0 init my-app",
+    'generate a react-native aplication called my-app'
   )
   .help("h")
   .alias("h", "help").argv;
