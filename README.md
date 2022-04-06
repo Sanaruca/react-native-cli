@@ -40,6 +40,3 @@ $ rn g s screen-name
 ```
 > Note: we have used the command `g` which refers to `generate` as well as `c` which refers to `component` and `s` which refers to `screen`.
 
-## License
-MIT
-
