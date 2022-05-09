@@ -1,83 +1,99 @@
-import fs from "fs";
-import path from "path";
+import fs from 'fs';
+import path from 'path';
 
 export function init(appName: string) {
-  const content = fs.readFileSync(path.join(__dirname,'./templates/app-root-template.dott')),
+  const content = fs.readFileSync(
+      path.join(__dirname, './templates/app-root-template.dott')
+    ),
     projectPath = path.resolve(`./${appName}`),
     appRootFilePath = path.join(projectPath, 'App.tsx');
-  ensureCreateDir(path.join(projectPath, 'app/components'))
-  fs.writeFileSync(path.join(projectPath,'/app/components/Layout.tsx'), fs.readFileSync(path.join(__dirname,'./templates/layout-component-template.dott')));
+  ensureCreateDir(path.join(projectPath, 'app/components'));
+  fs.writeFileSync(
+    path.join(projectPath, '/app/components/Layout.tsx'),
+    fs.readFileSync(
+      path.join(__dirname, './templates/layout-component-template.dott')
+    )
+  );
   console.log('created:', 'Layout');
   createScreenFile('home', projectPath);
-  fs.writeFile(appRootFilePath, content, (error)=> {
-    if(error) throw error;
-    console.log('created:', appRootFilePath)
-  })
+  fs.writeFile(appRootFilePath, content, (error) => {
+    if (error) throw error;
+    console.log('created:', appRootFilePath);
+  });
 }
 
-export function createComponentFile(name: string, projectPath = path.resolve() ) {
-  const fileNameFormat = strFormat(name, 'split-by-dash')
+export function createComponentFile(
+  name: string,
+  projectPath = path.resolve()
+) {
+  const fileNameFormat = strFormat(name, 'split-by-dash');
   name = strFormat(name);
-  const fileDist = path.join(projectPath, `/app/components/${fileNameFormat}-component.tsx`);
+  const fileDist = path.join(
+    projectPath,
+    `/app/components/${fileNameFormat}-component.tsx`
+  );
   if (fs.existsSync(fileDist)) return;
-  ensureCreateDir(path.join(projectPath,'/app/components'));
-  ensureCreateDir(path.join(projectPath,'/app/types'));
-  writeComponentProps(name, path.join(projectPath,'/app/types'));
+  ensureCreateDir(path.join(projectPath, '/app/components'));
+  ensureCreateDir(path.join(projectPath, '/app/types'));
+  writeComponentProps(name, path.join(projectPath, '/app/types'));
   const content = fs
-    .readFileSync(path.join(__dirname, "/templates/component-template.dott"))
+    .readFileSync(path.join(__dirname, '/templates/component-template.dott'))
     .toString()
     .replace(/\$COMPONENT_NAME\$/g, strFormat(name, 'UpperCamelCase'));
 
   fs.writeFile(fileDist, content, (err) => {
     if (err) throw err;
-    console.log("created:", fileDist);
+    console.log('created:', fileDist);
   });
 }
 
 function writeComponentProps(componentName: string, typesPathDir: string) {
-  const propsFilePath = path.join(typesPathDir, "props.ts"),
+  const propsFilePath = path.join(typesPathDir, 'props.ts'),
     interfaceDeclaration = `export interface ${strFormat(
       componentName
     )}Props {}\n`;
 
   if (!fs.existsSync(propsFilePath)) {
     fs.writeFileSync(propsFilePath, interfaceDeclaration);
-    console.log("created:", propsFilePath);
+    console.log('created:', propsFilePath);
   } else {
     fs.writeFile(
       propsFilePath,
-      "\n" + interfaceDeclaration,
-      { flag: "a" },
+      '\n' + interfaceDeclaration,
+      { flag: 'a' },
       (err) => {
         if (err) throw err;
       }
     );
   }
   console.log(
-    "type",
-    strFormat(componentName) + "Props",
-    "added to:",
+    'type',
+    strFormat(componentName) + 'Props',
+    'added to:',
     propsFilePath
   );
 }
 
 export function createScreenFile(name: string, projectPath = path.resolve()) {
-  const fileNameFormat = strFormat(name, 'split-by-dash')
+  const fileNameFormat = strFormat(name, 'split-by-dash');
   name = strFormat(name);
-  const fileDist = path.join(projectPath, `/app/screens/${fileNameFormat}-screen.tsx`);
+  const fileDist = path.join(
+    projectPath,
+    `/app/screens/${fileNameFormat}-screen.tsx`
+  );
   ensureCreateDir(path.join(projectPath, '/app/screens'));
   ensureCreateDir(path.join(projectPath, '/app/types'));
   // console.log({__dirname})
   writeScreenProps(name, path.join(projectPath, './app/types'));
   const content = fs
     .readFileSync(
-      path.join(__dirname, "/templates/screen-component-template.dott")
+      path.join(__dirname, '/templates/screen-component-template.dott')
     )
     .toString()
     .replace(/\$SCREEN_NAME\$/g, strFormat(name, 'UpperCamelCase'));
   fs.writeFile(fileDist, content, (error) => {
     if (error) throw error;
-    console.log("created:", fileDist);
+    console.log('created:', fileDist);
   });
 }
 
@@ -87,25 +103,22 @@ function ensureCreateDir(dirPath: string) {
   if (condition) return true;
   ensureCreateDir(path.dirname(dirPath));
   fs.mkdirSync(dirPath);
-  console.log("created:", dirPath);
+  console.log('created:', dirPath);
   // fs.mkdirSync(filePath)
 }
 
 function writeScreenProps(screenName: string, typesDirPath: string) {
-  const screenPropsFilePath = path.join(typesDirPath, "screen-props.ts");
+  const screenPropsFilePath = path.join(typesDirPath, 'screen-props.ts');
   const isFileExist = fs.existsSync(screenPropsFilePath);
   if (!isFileExist) {
     const content = fs
       .readFileSync(
-        path.join(__dirname, "/templates/screen-props-template.dott")
+        path.join(__dirname, '/templates/screen-props-template.dott')
       )
       .toString()
-      .replace(
-        "$SCREEN_NAME$",
-        strFormat(screenName, 'UpperCamelCase')
-      );
+      .replace('$SCREEN_NAME$', strFormat(screenName, 'UpperCamelCase'));
     fs.writeFileSync(screenPropsFilePath, content);
-    console.log("created:", screenPropsFilePath);
+    console.log('created:', screenPropsFilePath);
     return;
   }
   const screenPropsContent = fs.readFileSync(screenPropsFilePath).toString(),
@@ -115,32 +128,32 @@ function writeScreenProps(screenName: string, typesDirPath: string) {
   if (screenPropsContent.includes(screenName)) return;
   let rbCount = 0,
     lbCount = 1,
-    i = match!.index! + match!.at(0)!.length;
+    i = match!.index! + match![0]!.length;
   while (lbCount != rbCount) {
     const char = screenPropsContent[i++];
     switch (char) {
-      case "{":
+      case '{':
         lbCount++;
         break;
-      case "}":
+      case '}':
         rbCount++;
         break;
     }
   }
   const input = screenPropsContent.slice(match!.index, i),
-    types = [...getTypes(input), screenName + ": {}"];
+    types = [...getTypes(input), screenName + ': {}'];
   fs.writeFileSync(
     screenPropsFilePath,
     screenPropsContent.replace(
       input,
-      "type BaseStackScreenParamList = {\n\t" + types.join(";\n\t") + ";\n}"
+      'type BaseStackScreenParamList = {\n\t' + types.join(';\n\t') + ';\n}'
     )
   );
 }
 
 function getTypes(input: string) {
   const nBrackets = input.match(/[{}]/g)!.length;
-  if (nBrackets % 2 != 0) throw new Error("some braket missing");
+  if (nBrackets % 2 != 0) throw new Error('some braket missing');
   let match;
   const regex = /\w+\s*:\s*{/g,
     auxArr = [];
@@ -156,10 +169,10 @@ function getTypes(input: string) {
     while (countLeftBraket != countRigthBraket) {
       const char = auxInput[i++];
       switch (char) {
-        case "{":
+        case '{':
           countLeftBraket++;
           break;
-        case "}":
+        case '}':
           countRigthBraket++;
           break;
       }
@@ -189,18 +202,34 @@ function getTypes(input: string) {
   return auxArr;
 }
 
-function strFormat(input: string, style: 'camelCase'| 'UpperCamelCase' | 'snake_case' | 'split-by-dash' | 'SNAKE_CASE' = 'camelCase') {
-    const regex = /[-_]/g,
-        arr = regex.test(input) ? input.split(regex) : [input],
-        styleCase: Record<typeof style, string> = {
-            camelCase: arr.reduce((acc, current, i) => !i ? acc + current : acc + camelCase(current)),
-            snake_case: arr.join('_').toLowerCase(),
-            get UpperCamelCase(){ return this.camelCase.charAt(0).toUpperCase() + this.camelCase.slice(1) },
-            get 'split-by-dash'() { return this.snake_case.replace(/_/g, '-') },
-            get SNAKE_CASE() { return this.snake_case.toUpperCase() }
-        }
-    return styleCase[style]
-    function camelCase(str: string) {
-        return str.charAt(0)?.toUpperCase() + str.slice(1).toLowerCase()
-    }
+function strFormat(
+  input: string,
+  style:
+    | 'camelCase'
+    | 'UpperCamelCase'
+    | 'snake_case'
+    | 'split-by-dash'
+    | 'SNAKE_CASE' = 'camelCase'
+) {
+  const regex = /[-_]/g,
+    arr = regex.test(input) ? input.split(regex) : [input],
+    styleCase: Record<typeof style, string> = {
+      camelCase: arr.reduce((acc, current, i) =>
+        !i ? acc + current : acc + camelCase(current)
+      ),
+      snake_case: arr.join('_').toLowerCase(),
+      get UpperCamelCase() {
+        return this.camelCase.charAt(0).toUpperCase() + this.camelCase.slice(1);
+      },
+      get 'split-by-dash'() {
+        return this.snake_case.replace(/_/g, '-');
+      },
+      get SNAKE_CASE() {
+        return this.snake_case.toUpperCase();
+      },
+    };
+  return styleCase[style];
+  function camelCase(str: string) {
+    return str.charAt(0)?.toUpperCase() + str.slice(1).toLowerCase();
+  }
 }
