@@ -26,7 +26,9 @@ export function createComponentFile(
   name: string,
   projectPath = path.resolve()
 ) {
-  const fileNameFormat = strFormat(name, 'split-by-dash');
+  let fileNameFormat = strFormat(name, 'split-by-dash');
+  fileNameFormat =
+    fileNameFormat.charAt(0).toUpperCase() + fileNameFormat.substring(1);
   name = strFormat(name);
   const fileDist = path.join(
     projectPath,
@@ -75,7 +77,9 @@ function writeComponentProps(componentName: string, typesPathDir: string) {
 }
 
 export function createScreenFile(name: string, projectPath = path.resolve()) {
-  const fileNameFormat = strFormat(name, 'split-by-dash');
+  let fileNameFormat = strFormat(name, 'split-by-dash');
+  fileNameFormat =
+    fileNameFormat.charAt(0).toUpperCase() + fileNameFormat.substring(1);
   name = strFormat(name);
   const fileDist = path.join(
     projectPath,
